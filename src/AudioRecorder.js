@@ -1,18 +1,38 @@
 import React, { useState, useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+// Configuración de Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyDEEAmfn3xIIDxRDtSJinz2hpd7WtEUTW0",
+    authDomain: "alensio-5ea42.firebaseapp.com",
+    projectId: "alensio-5ea42",
+    storageBucket: "alensio-5ea42.appspot.com",
+    messagingSenderId: "323410383047",
+    appId: "1:323410383047:web:c64bbfdf67fab7cf652ee2",
+    measurementId: "G-Z3ZRT808NF"
+};
+
+
+
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 const AudioRecorder = () => {
   const [recording, setRecording] = useState(false);
   const [audioURL, setAudioURL] = useState(null);
-  const [error, setError] = useState(false); // Estado para manejar errores
+  const [error, setError] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [audioBlob, setAudioBlob] = useState(null); // Estado para almacenar el Blob del audio
-  const [firstSubmit, setFirstSubmit] = useState(true); // Estado para manejar el botón de envío
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [firstSubmit, setFirstSubmit] = useState(true);
 
   useEffect(() => {
     const initMediaRecorder = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
-      
+
       recorder.ondataavailable = (event) => {
         const url = URL.createObjectURL(event.data);
         setAudioURL(url);
@@ -48,6 +68,7 @@ const AudioRecorder = () => {
       };
     }
   }, [mediaRecorder, recording]);
+
   const handleStartRecording = () => {
     if (mediaRecorder) {
       mediaRecorder.start();
@@ -68,28 +89,24 @@ const AudioRecorder = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('audio', audioBlob, 'audio.wav');
-
+    const storageRef = ref(storage, `audios/${Date.now()}.wav`);
+    
     try {
-      const response = await fetch('http://localhost:5000/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      // Aquí siempre vamos a mostrar el mensaje de error falso
+      await uploadBytes(storageRef, audioBlob);
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log('Audio subido exitosamente. URL de descarga:', downloadURL);
+      
+      // Aquí mostramos el error falso, pero el archivo se sube correctamente
       setError(true); // Simular un error
       setFirstSubmit(false); // Deshabilitar el botón de primer envío
       setTimeout(() => {
         setError(false); // Resetear el mensaje de error después de 2 segundos
       }, 5000);
 
-      // Aunque se muestra el error, el audio se envía correctamente
-      const data = await response.json();
-      console.log(data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error al subir el audio a Firebase:', error);
     }
+
     setAudioURL(null);
     setAudioBlob(null);
   };
@@ -97,27 +114,16 @@ const AudioRecorder = () => {
   const handleSecondSubmit = async () => {
     if (audioURL) {
       const audioBlob = await fetch(audioURL).then((r) => r.blob());
-      const formData = new FormData();
-      formData.append('audio', audioBlob, 'audio.wav');
+      const storageRef = ref(storage, `audios/${Date.now()}.wav`);
 
       try {
-        // Subir el audio al servidor
-        const response = await fetch('http://localhost:5000/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        const result = await response.json();
-        if (result.filePath) {
-          alert('Audio enviado correctamente');
-          console.log('Ruta del archivo:', result.filePath);
-        } else {
-          alert('Error al subir el audio');
-          setError(true); // Manejar error de subida
-        }
+        await uploadBytes(storageRef, audioBlob);
+        const downloadURL = await getDownloadURL(storageRef);
+        console.log('Audio subido exitosamente. URL de descarga:', downloadURL);
+        alert('Audio enviado correctamente');
       } catch (error) {
-        console.error('Error:', error);
-        setError(true); // Manejar error de subida
+        console.error('Error al subir el audio a Firebase:', error);
+        setError(true);
       }
     } else {
       alert("No hay audio grabado para enviar.");

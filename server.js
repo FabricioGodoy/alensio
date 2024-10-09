@@ -1,32 +1,22 @@
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-const app = express();
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDEEAmfn3xIIDxRDtSJinz2hpd7WtEUTW0",
+  authDomain: "alensio-5ea42.firebaseapp.com",
+  projectId: "alensio-5ea42",
+  storageBucket: "alensio-5ea42.appspot.com",
+  messagingSenderId: "323410383047",
+  appId: "1:323410383047:web:c64bbfdf67fab7cf652ee2",
+  measurementId: "G-Z3ZRT808NF"
+};
 
-// Configuración de multer para guardar los archivos en la carpeta 'uploads'
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Carpeta donde se guardarán los archivos
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Definir el nombre del archivo
-  },
-});
 
-const upload = multer({ storage });
-
-// Endpoint para subir el archivo
-app.post('/upload', upload.single('audio'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send('No se ha subido ningún archivo.');
-  }
-  res.json({ filePath: `/uploads/${req.file.filename}` });
-});
-
-// Servir archivos estáticos desde 'uploads'
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-app.listen(5000, () => {
-  console.log('Servidor escuchando en puerto 5000');
-});
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
