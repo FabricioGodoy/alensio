@@ -116,13 +116,13 @@ const AudioRecorder = () => {
     setFirstSubmit(true); // Reiniciar el estado del botón de envío
   };
 
-  const handleRetry = () => {
+/*   const handleRetry = () => {
     setAudioURL(null); // Reiniciar la URL de audio
     setAudioBlob(null); // Reiniciar el blob del audio
     setError(false); // Resetear el estado de error
     setFirstSubmit(true); // Reiniciar el estado del botón de envío
     handleStartRecording(); // Volver a iniciar la grabación
-  };
+  }; */
 
   return (
     <div>
