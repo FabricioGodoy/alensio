@@ -8,12 +8,13 @@ app.use(cors());
 
 // Configuración de multer para almacenar los audios
 const storage = multer.diskStorage({
-  destination: './uploads/',
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Carpeta donde se guardarán los archivos
+  },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    cb(null, `${Date.now()}-${file.originalname}`); // Definir el nombre del archivo
   },
 });
-
 const upload = multer({ storage });
 
 // Ruta para recibir los archivos de audio
@@ -21,7 +22,7 @@ app.post('/upload', upload.single('audio'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No se envió ningún archivo');
   }
-  res.send({ filePath: `/uploads/${req.file.filename}` });
+  res.json({ filePath: `/uploads/${req.file.filename}` });
 });
 
 // Servir archivos estáticos (opcional para acceder a los audios desde el frontend)
