@@ -34,9 +34,10 @@ const AudioRecorder = () => {
       const recorder = new MediaRecorder(stream);
 
       recorder.ondataavailable = (event) => {
-        const url = URL.createObjectURL(event.data);
+        const blob = new Blob([event.data], { type: 'audio/wav' });
+        const url = URL.createObjectURL(blob);
         setAudioURL(url);
-        setAudioBlob(event.data);
+        setAudioBlob(blob);
       };
 
       recorder.onstop = () => {
