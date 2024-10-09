@@ -132,6 +132,8 @@ const AudioRecorder = () => {
     }
 
     setFirstSubmit(true); // Reiniciar el estado del botón de envío
+    setAudioURL(null);
+    setAudioBlob(null);
   };
 
   return (
@@ -146,8 +148,8 @@ const AudioRecorder = () => {
 
       {audioURL && (
         <div>
-          <audio controls src={audioURL} />
-          {firstSubmit && (
+        <audio controls src={audioURL} />  
+         {firstSubmit && (
             <button onClick={handleFirstSubmit}>Enviar Audio</button>
           )}
           {!firstSubmit && (
