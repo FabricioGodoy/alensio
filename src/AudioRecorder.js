@@ -95,7 +95,7 @@ const AudioRecorder = () => {
     try {
       await uploadBytes(storageRef, audioBlob);
       const downloadURL = await getDownloadURL(storageRef);
-      console.log('Audio subido exitosamente. URL de descarga:', downloadURL);
+      console.log('Primer audio subido exitosamente. URL de descarga:', downloadURL);
       
       // Aquí mostramos el error falso, pero el archivo se sube correctamente
       setError(true); // Simular un error
@@ -103,7 +103,7 @@ const AudioRecorder = () => {
       alert('Error al enviar el audio. Por favor graba nuevamente.');
       setTimeout(() => {
         setError(false); // Resetear el mensaje de error después de 2 segundos
-      }, 5000);
+      }, 2500);
 
     } catch (error) {
       console.error('Error al subir el audio a Firebase:', error);
@@ -121,7 +121,7 @@ const AudioRecorder = () => {
       try {
         await uploadBytes(storageRef, audioBlob);
         const downloadURL = await getDownloadURL(storageRef);
-        console.log('Audio subido exitosamente. URL de descarga:', downloadURL);
+        console.log('Segundo audio subido exitosamente. URL de descarga:', downloadURL);
         alert('Audio enviado correctamente');
       } catch (error) {
         console.error('Error al subir el audio a Firebase:', error);
