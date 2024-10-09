@@ -34,7 +34,23 @@ const AudioRecorder = () => {
         mediaRecorder.stream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, []);
+  }, []); // Solo se ejecuta una vez al montar el componente
+
+  useEffect(() => {
+    // Este useEffect se ejecuta cuando cambia mediaRecorder
+    if (mediaRecorder) {
+      const handleStopRecording = () => {
+        if (mediaRecorder && recording) {
+          mediaRecorder.stop();
+        }
+      };
+
+      // Cleanup function to stop recording on unmount
+      return () => {
+        handleStopRecording();
+      };
+    }
+  }, [mediaRecorder]); // Dependencia agregada para mediaRecorder
 
   const handleStartRecording = () => {
     if (mediaRecorder) {
@@ -43,7 +59,6 @@ const AudioRecorder = () => {
       setError(false); // Resetear error al comenzar una nueva grabación
     }
   };
-
   const handleStopRecording = () => {
     if (mediaRecorder && recording) {
       mediaRecorder.stop();
@@ -78,9 +93,8 @@ const AudioRecorder = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-      // Resetear el audio después de enviar el segundo audio
-      setAudioURL(null);
-      setAudioBlob(null);
+    setAudioURL(null);
+    setAudioBlob(null);
   };
 
   const handleSecondSubmit = async () => {
