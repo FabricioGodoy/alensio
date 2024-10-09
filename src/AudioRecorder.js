@@ -12,11 +12,11 @@ const AudioRecorder = () => {
     const initMediaRecorder = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
-
+      
       recorder.ondataavailable = (event) => {
         const url = URL.createObjectURL(event.data);
         setAudioURL(url);
-        setAudioBlob(event.data); // Guardar el blob del audio
+        setAudioBlob(event.data);
       };
 
       recorder.onstop = () => {
@@ -28,28 +28,26 @@ const AudioRecorder = () => {
 
     initMediaRecorder();
 
-    // Cleanup
     return () => {
       if (mediaRecorder) {
         mediaRecorder.stream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, []); // Solo se ejecuta una vez al montar el componente
+  }, []);
 
   useEffect(() => {
-    // Este useEffect se ejecuta cuando cambia mediaRecorder
-    const handleStopRecording = () => {
-      if (mediaRecorder && recording) {
-        mediaRecorder.stop();
-      }
-    };
+    if (mediaRecorder) {
+      const handleStopRecording = () => {
+        if (recording) {
+          mediaRecorder.stop();
+        }
+      };
 
-    // Cleanup function to stop recording on unmount
-    return () => {
-      handleStopRecording();
-    };
-  }, [mediaRecorder, recording]); // Dependencias actualizadas para incluir mediaRecorder y recording
-
+      return () => {
+        handleStopRecording();
+      };
+    }
+  }, [mediaRecorder, recording]);
   const handleStartRecording = () => {
     if (mediaRecorder) {
       mediaRecorder.start();
