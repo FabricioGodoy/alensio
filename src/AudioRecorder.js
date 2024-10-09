@@ -52,6 +52,13 @@ const AudioRecorder = () => {
     }
   }, [mediaRecorder]); // Dependencia agregada para mediaRecorder
 
+  useEffect(() => {
+    if (recording) {
+      // Aquí puedes poner la lógica que necesitas para 'recording' si es necesario
+    }
+  }, [recording]); // Agrega 'recording' como dependencia
+
+  
   const handleStartRecording = () => {
     if (mediaRecorder) {
       mediaRecorder.start();
