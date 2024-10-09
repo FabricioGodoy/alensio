@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import AudioRecorder from './AudioRecorder';
 import './App.css';
 
