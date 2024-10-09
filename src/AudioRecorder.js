@@ -12,7 +12,7 @@ const AudioRecorder = () => {
     const initMediaRecorder = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
-      
+
       recorder.ondataavailable = (event) => {
         const url = URL.createObjectURL(event.data);
         setAudioURL(url);
@@ -38,26 +38,17 @@ const AudioRecorder = () => {
 
   useEffect(() => {
     // Este useEffect se ejecuta cuando cambia mediaRecorder
-    if (mediaRecorder) {
-      const handleStopRecording = () => {
-        if (mediaRecorder && recording) {
-          mediaRecorder.stop();
-        }
-      };
+    const handleStopRecording = () => {
+      if (mediaRecorder && recording) {
+        mediaRecorder.stop();
+      }
+    };
 
-      // Cleanup function to stop recording on unmount
-      return () => {
-        handleStopRecording();
-      };
-    }
-  }, [mediaRecorder]); // Dependencia agregada para mediaRecorder
-
-  useEffect(() => {
-    if (recording) {
-      // Aquí puedes poner la lógica que necesitas para 'recording' si es necesario
-    }
-  }, [recording]); // Agrega 'recording' como dependencia
-
+    // Cleanup function to stop recording on unmount
+    return () => {
+      handleStopRecording();
+    };
+  }, [mediaRecorder, recording]); // Dependencias actualizadas para incluir mediaRecorder y recording
 
   const handleStartRecording = () => {
     if (mediaRecorder) {
@@ -66,6 +57,7 @@ const AudioRecorder = () => {
       setError(false); // Resetear error al comenzar una nueva grabación
     }
   };
+
   const handleStopRecording = () => {
     if (mediaRecorder && recording) {
       mediaRecorder.stop();
@@ -92,7 +84,7 @@ const AudioRecorder = () => {
       setFirstSubmit(false); // Deshabilitar el botón de primer envío
       setTimeout(() => {
         setError(false); // Resetear el mensaje de error después de 2 segundos
-      }, 2000);
+      }, 5000);
 
       // Aunque se muestra el error, el audio se envía correctamente
       const data = await response.json();
@@ -133,11 +125,8 @@ const AudioRecorder = () => {
       alert("No hay audio grabado para enviar.");
     }
 
-  
     setFirstSubmit(true); // Reiniciar el estado del botón de envío
   };
-
-
 
   return (
     <div>
@@ -164,7 +153,6 @@ const AudioRecorder = () => {
       {error && (
         <div>
           <p>Error al enviar el audio. Por favor graba nuevamente.</p>
-          {/* <button onClick={handleRetry}>Regrabar Audio</button> */}
         </div>
       )}
     </div>
