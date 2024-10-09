@@ -100,6 +100,7 @@ const AudioRecorder = () => {
       // Aquí mostramos el error falso, pero el archivo se sube correctamente
       setError(true); // Simular un error
       setFirstSubmit(false); // Deshabilitar el botón de primer envío
+      alert('Error al enviar el audio. Por favor graba nuevamente.');
       setTimeout(() => {
         setError(false); // Resetear el mensaje de error después de 2 segundos
       }, 5000);
