@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
+import './App.css';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 // Configuración de Firebase
@@ -20,6 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
+
 const AudioRecorder = () => {
   const [recording, setRecording] = useState(false);
   const [audioURL, setAudioURL] = useState(null);
@@ -27,9 +29,11 @@ const AudioRecorder = () => {
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
   const [firstSubmit, setFirstSubmit] = useState(true);
+  const [audioStream, setAudioStream] = useState(null);
 
-  useEffect(() => {
-    const initMediaRecorder = async () => {
+ const handleStartRecording = async () => {
+    try {
+      // Solicitar acceso al micrófono solo cuando se inicia la grabación
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
 
@@ -42,39 +46,18 @@ const AudioRecorder = () => {
 
       recorder.onstop = () => {
         setRecording(false);
+        stream.getTracks().forEach(track => track.stop()); // Detener el stream al terminar la grabación
+        setAudioStream(null); // Limpiar el estado del stream
       };
 
       setMediaRecorder(recorder);
-    };
+      setAudioStream(stream); // Almacenar el stream para liberarlo después
 
-    initMediaRecorder();
-
-    return () => {
-      if (mediaRecorder) {
-        mediaRecorder.stream.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (mediaRecorder) {
-      const handleStopRecording = () => {
-        if (recording) {
-          mediaRecorder.stop();
-        }
-      };
-
-      return () => {
-        handleStopRecording();
-      };
-    }
-  }, [mediaRecorder, recording]);
-
-  const handleStartRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.start();
+      recorder.start();
       setRecording(true);
       setError(false); // Resetear error al comenzar una nueva grabación
+    } catch (err) {
+      console.error('Error al acceder al micrófono:', err);
     }
   };
 
@@ -138,33 +121,41 @@ const AudioRecorder = () => {
 
   return (
     <div>
-      {recording ? (
-        <div>
-          <button onClick={handleStopRecording}>Detener Grabación</button>
-        </div>
-      ) : (
-        <button onClick={handleStartRecording}>Iniciar Grabación</button>
-      )}
-
-      {audioURL && (
-        <div>
-        <audio controls src={audioURL} />  
-         {firstSubmit && (
-            <button onClick={handleFirstSubmit}>Enviar Audio</button>
+        <div className='reproductorMedia'>
+          {recording ? (
+              <button onClick={handleStopRecording} className={`icon-button-stop ${recording ? 'blinking' : ''}`}>
+              <img src="https://img.icons8.com/office/50/stop.png" alt="stop"/>
+              </button>
+          ) : (
+            <button onClick={handleStartRecording} className='icon-button'>
+              <img src="https://img.icons8.com/ios/50/microphone.png" alt="microphone" />
+            </button>
           )}
-          {!firstSubmit && (
-            <button onClick={handleSecondSubmit}>Enviar Audio</button>
-          )}
+            
+                {audioURL && (
+          <div className='audioBarra'>
+          <audio controls src={audioURL}  />
+            {firstSubmit ? (
+              <button onClick={handleFirstSubmit} className='icon-button'>
+                <img src="https://img.icons8.com/ios/50/send.png" alt="send" />
+              </button>
+            ) : (
+              <button onClick={handleSecondSubmit} className='icon-button'>
+                <img src="https://img.icons8.com/ios/50/send.png" alt="send" />
+              </button>
+            )}
+          </div>
+                )}
         </div>
-      )}
-
+  
       {error && (
-        <div>
+        <div className='textoError'>
           <p>Error al enviar el audio. Por favor graba nuevamente.</p>
         </div>
       )}
     </div>
   );
+  
 };
 
 export default AudioRecorder;

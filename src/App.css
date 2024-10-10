@@ -1,11 +1,98 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Cormorant Garamond', serif, 'Roboto', sans-serif;
+}
 .App {
+/*   height: 100vh; */
+  width: 98.65vw;
   text-align: center;
+  display: grid;
+  place-items: center;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2Fwavy-argentina-flag-background-with-brush-stroke-style-argentina-independence-day-illustration-free-vector.jpg?alt=media&token=b2dc025a-9224-44f9-89ea-8442a5bff3e5');
+  background-repeat: repeat;
+  background-size: 350px 220px;
+  background-color: black;
+}
+.reproductorMedia{
+  display: flex;
+  flex-direction: row; /* Coloca los elementos en una columna */
+  align-items: flex-start;    /* Alinea los elementos horizontalmente al centro */
+  justify-content: center; /* Centra los elementos verticalmente */
+  height: 100vh;           /* Para asegurarte de que ocupe todo el espacio disponible */
+ 
+
+}
+.icon-button {
+  background: white;
+  opacity: 0.7;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 10px;
+  margin: 5px;
+}
+.icon-button-stop {
+  background: white;
+  opacity: 0.7;
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+  outline: none;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.icon-button-stop img {
+  opacity: 1;
+  margin: 3px;
 }
+.audioBarra{
+  display: flex;           /* Asegura que los elementos dentro también estén alineados */
+  flex-direction: column;   /* Mantiene el botón y la barra de audio en columna */
+  align-items: center;      /* Centra los elementos dentro del contenedor de audio */
+ 
+}
+
+.icon-button img {
+  opacity: 1;
+  margin: 3px;
+}
+.icon-button, .icon-button-stop {
+  background: white;
+  opacity: 0.7;
+  border: none;
+  border-radius: 10px;
+  margin: 10px;           /* Aumenta el margen para separar mejor los iconos */
+  cursor: pointer;
+  outline: none;
+}
+
+.icon-button img, .icon-button-stop img {
+  opacity: 1;
+  margin: 3px;
+}
+.textoError{
+  color: white;
+  font-size: 30px;
+}
+/* Animación de parpadeo */
+.blinking {
+  animation: blink 1.5s infinite; /* Duración y repetición infinita */
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1; /* Totalmente visible */
+  }
+  50% {
+    opacity: 0.3; /* Parcialmente transparente */
+  }
+  100% {
+    opacity: 1; /* De nuevo visible */
+  }
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -13,26 +100,26 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@media (max-width: 800px) {
+  .reproductorMedia{
+    display: flex;
+    
+    }
+    .App {
+     
+      background-image: url('https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2Fwavy-argentina-flag-background-with-brush-stroke-style-argentina-independence-day-illustration-free-vector.jpg?alt=media&token=b2dc025a-9224-44f9-89ea-8442a5bff3e5');
+      background-repeat: repeat;
+      background-size: 100px 75px;
+      background-color: black;
+    }
+    .reproductorMedia{
+      display: flex;
+      flex-direction: column; /* Coloca los elementos en una columna */
+      align-items: center;    /* Alinea los elementos horizontalmente al centro */
+      justify-content: center; /* Centra los elementos verticalmente */
+      height: 100%;           /* Para asegurarte de que ocupe todo el espacio disponible */
+      width: 100%;
+    
+    }
+    
 }
