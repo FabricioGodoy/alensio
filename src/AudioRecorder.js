@@ -161,7 +161,8 @@ const AudioRecorder = ({ age, gender }) => {
       {showThanksPopup && (
         <div className="popup-thanks-container">
           <div className="popup-thanks-content">
-            <img src="https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2Fmessi-facebook.jpg?alt=media&token=52ac7ca5-d9a8-41d1-83a8-8a125715f548" alt="Gracias" />
+            <img src="https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2FImagen%20de%20WhatsApp%202024-10-11%20a%20las%2013.36.39_0724cc4e.jpg?alt=media&token=c33ee83f-a89d-40d1-85b8-4936222d85ac" alt="Gracias" />
+          <h2>GRACIAS </h2>
             <p>¡Gracias por tu participación!</p>
             <button onClick={() => setShowThanksPopup(false)}>Cerrar</button>
           </div>
