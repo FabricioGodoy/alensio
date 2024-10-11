@@ -5,23 +5,25 @@
   font-family: 'Cormorant Garamond', serif, 'Roboto', sans-serif;
 }
 .App {
-/*   height: 100vh; */
+  height: 100vh;
   width: 98.65vw;
   text-align: center;
   display: grid;
   place-items: center;
+}
+.bgcImage{
   background-image: url('https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2Fwavy-argentina-flag-background-with-brush-stroke-style-argentina-independence-day-illustration-free-vector.jpg?alt=media&token=b2dc025a-9224-44f9-89ea-8442a5bff3e5');
-  background-repeat: repeat;
-  background-size: 350px 220px;
-  background-color: black;
+  
 }
 .reproductorMedia{
+/*   display: flex;
+  flex-direction: row; 
+  align-items: flex-start;    
+  justify-content: center;  */
   display: flex;
-  flex-direction: row; /* Coloca los elementos en una columna */
-  align-items: flex-start;    /* Alinea los elementos horizontalmente al centro */
-  justify-content: center; /* Centra los elementos verticalmente */
-  height: 100vh;           /* Para asegurarte de que ocupe todo el espacio disponible */
- 
+  align-items: center;
+  justify-content: center;
+  flex-direction: column
 
 }
 .icon-button {
@@ -48,10 +50,9 @@
   margin: 3px;
 }
 .audioBarra{
-  display: flex;           /* Asegura que los elementos dentro también estén alineados */
-  flex-direction: column;   /* Mantiene el botón y la barra de audio en columna */
-  align-items: center;      /* Centra los elementos dentro del contenedor de audio */
- 
+  display: flex;
+  flex-direction: row; 
+  align-items: center; 
 }
 
 .icon-button img {
@@ -59,13 +60,14 @@
   margin: 3px;
 }
 .icon-button, .icon-button-stop {
-  background: white;
-  opacity: 0.7;
+  background: rgb(230, 50, 50);
+  opacity: 1;
   border: none;
   border-radius: 10px;
-  margin: 10px;           /* Aumenta el margen para separar mejor los iconos */
+  margin: 10px;          
   cursor: pointer;
   outline: none;
+  display: flex;
 }
 
 .icon-button img, .icon-button-stop img {
@@ -73,8 +75,17 @@
   margin: 3px;
 }
 .textoError{
-  color: white;
+  color: rgb(240, 11, 11);
+  font-size: 35px;
+  background-color: black;
+  font-family: monospace;
+  font-weight: bold;
+}
+.textoMensaje{
+  font-family: monospace;
+  color: black;
   font-size: 30px;
+  font-weight: bold;
 }
 /* Animación de parpadeo */
 .blinking {
@@ -94,6 +105,109 @@
 }
 
 
+
+
+
+
+.form-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2FD_NQ_NP_655067-MLA78123226174_082024-O.webp?alt=media&token=94258274-3ea1-484a-91f2-fafbf3a95b34');
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+  background-repeat: repeat;
+  background-size: 200px 150px;
+  background-color: black;
+}
+
+.popup-content {
+  background-color: rgb(238, 44, 44);
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.popup-content h2 {
+  margin-bottom: 20px;
+}
+
+.popup-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+/* PopupThanks.css */
+
+.popup-thanks-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* Un valor más alto que el primer popup para asegurarse de que esté por encima de todo */
+}
+
+.popup-thanks-content {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.popup-thanks-content h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+.popup-thanks-content p {
+  margin-bottom: 30px;
+  color: #666;
+  font-size: 18px;
+}
+
+.popup-thanks-content img {
+  max-width:25vw;
+  margin-bottom: 20px;
+}
+
+.popup-thanks-content button {
+  padding: 10px 25px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.popup-thanks-content button:hover {
+  background-color: #0056b3;
+}
+
+.botonenviarform{
+  border-radius: 10px;
+  margin: auto;
+  width: 10vw;
+  font-size: 15px;
+}
+
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -105,13 +219,13 @@
     display: flex;
     
     }
-    .App {
+   /*  .App {
      
       background-image: url('https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2Fwavy-argentina-flag-background-with-brush-stroke-style-argentina-independence-day-illustration-free-vector.jpg?alt=media&token=b2dc025a-9224-44f9-89ea-8442a5bff3e5');
       background-repeat: repeat;
       background-size: 100px 75px;
       background-color: black;
-    }
+    } */
     .reproductorMedia{
       display: flex;
       flex-direction: column; /* Coloca los elementos en una columna */

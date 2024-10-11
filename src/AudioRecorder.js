@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import './App.css';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import FormPopup from './formPopup';
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -22,18 +23,17 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
 
-const AudioRecorder = () => {
+const AudioRecorder = ({ age, gender }) => {
   const [recording, setRecording] = useState(false);
   const [audioURL, setAudioURL] = useState(null);
   const [error, setError] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
   const [firstSubmit, setFirstSubmit] = useState(true);
-  const [audioStream, setAudioStream] = useState(null);
+  const [showThanksPopup, setShowThanksPopup] = useState(false);  
 
- const handleStartRecording = async () => {
-    try {
-      // Solicitar acceso al micrófono solo cuando se inicia la grabación
+  useEffect(() => {
+    const initMediaRecorder = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
 
@@ -46,18 +46,25 @@ const AudioRecorder = () => {
 
       recorder.onstop = () => {
         setRecording(false);
-        stream.getTracks().forEach(track => track.stop()); // Detener el stream al terminar la grabación
-        setAudioStream(null); // Limpiar el estado del stream
       };
 
       setMediaRecorder(recorder);
-      setAudioStream(stream); // Almacenar el stream para liberarlo después
+    };
 
-      recorder.start();
+    initMediaRecorder();
+
+    return () => {
+      if (mediaRecorder) {
+        mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
+
+  const handleStartRecording = () => {
+    if (mediaRecorder) {
+      mediaRecorder.start();
       setRecording(true);
       setError(false); // Resetear error al comenzar una nueva grabación
-    } catch (err) {
-      console.error('Error al acceder al micrófono:', err);
     }
   };
 
@@ -73,14 +80,15 @@ const AudioRecorder = () => {
       return;
     }
 
-    const storageRef = ref(storage, `audios/${Date.now()}.wav`);
-    
+    // Crear una carpeta con la edad y el sexo del usuario
+    const storageRef = ref(getStorage(), `audios/${age}_${gender}/${Date.now()}.wav`);
+
     try {
       await uploadBytes(storageRef, audioBlob);
       const downloadURL = await getDownloadURL(storageRef);
       console.log('Primer audio subido exitosamente. URL de descarga:', downloadURL);
-      
-      // Aquí mostramos el error falso, pero el archivo se sube correctamente
+
+      // Simular error
       setError(true); // Simular un error
       setFirstSubmit(false); // Deshabilitar el botón de primer envío
       alert('Error al enviar el audio. Por favor graba nuevamente.');
@@ -99,13 +107,13 @@ const AudioRecorder = () => {
   const handleSecondSubmit = async () => {
     if (audioURL) {
       const audioBlob = await fetch(audioURL).then((r) => r.blob());
-      const storageRef = ref(storage, `audios/${Date.now()}.wav`);
+      const storageRef = ref(getStorage(), `audios/${age}_${gender}/${Date.now()}.wav`);
 
       try {
         await uploadBytes(storageRef, audioBlob);
         const downloadURL = await getDownloadURL(storageRef);
         console.log('Segundo audio subido exitosamente. URL de descarga:', downloadURL);
-        alert('Audio enviado correctamente');
+        setShowThanksPopup(true);
       } catch (error) {
         console.error('Error al subir el audio a Firebase:', error);
         setError(true);
@@ -122,6 +130,8 @@ const AudioRecorder = () => {
   return (
     <div>
         <div className='reproductorMedia'>
+        <p className='textoMensaje' >Dejanos tu comentario</p>
+<hr/>
           {recording ? (
               <button onClick={handleStopRecording} className={`icon-button-stop ${recording ? 'blinking' : ''}`}>
               <img src="https://img.icons8.com/office/50/stop.png" alt="stop"/>
@@ -153,9 +163,22 @@ const AudioRecorder = () => {
           <p>Error al enviar el audio. Por favor graba nuevamente.</p>
         </div>
       )}
+
+         {/* Popup de agradecimiento */}
+         {showThanksPopup && (
+        <div className="popup-thanks-container">
+          <div className="popup-thanks-content">
+            <img src="https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2Fmessi-facebook.jpg?alt=media&token=52ac7ca5-d9a8-41d1-83a8-8a125715f548" alt="Gracias" />
+            <p>¡Gracias por tu participación!</p>
+            <button onClick={() => setShowThanksPopup(false)}>Cerrar</button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
   
 };
+
 
 export default AudioRecorder;
