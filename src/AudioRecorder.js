@@ -15,13 +15,9 @@ const firebaseConfig = {
     measurementId: "G-Z3ZRT808NF"
 };
 
-
-
-
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
-
 
 const AudioRecorder = ({ age, gender }) => {
   const [recording, setRecording] = useState(false);
@@ -31,41 +27,38 @@ const AudioRecorder = ({ age, gender }) => {
   const [audioBlob, setAudioBlob] = useState(null);
   const [firstSubmit, setFirstSubmit] = useState(true);
   const [showThanksPopup, setShowThanksPopup] = useState(false);  
+  const [stream, setStream] = useState(null); // Nuevo estado para el stream
 
   useEffect(() => {
-    const initMediaRecorder = async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
-
-      recorder.ondataavailable = (event) => {
-        const blob = new Blob([event.data], { type: 'audio/wav' });
-        const url = URL.createObjectURL(blob);
-        setAudioURL(url);
-        setAudioBlob(blob);
-      };
-
-      recorder.onstop = () => {
-        setRecording(false);
-      };
-
-      setMediaRecorder(recorder);
-    };
-
-    initMediaRecorder();
-
+    // Limpiar el stream cuando el componente se desmonta
     return () => {
-      if (mediaRecorder) {
-        mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, []);
+  }, [stream]);
 
-  const handleStartRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.start();
-      setRecording(true);
-      setError(false); // Resetear error al comenzar una nueva grabación
-    }
+  const handleStartRecording = async () => {
+    const newStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recorder = new MediaRecorder(newStream);
+
+    recorder.ondataavailable = (event) => {
+      const blob = new Blob([event.data], { type: 'audio/wav' });
+      const url = URL.createObjectURL(blob);
+      setAudioURL(url);
+      setAudioBlob(blob);
+    };
+
+    recorder.onstop = () => {
+      setRecording(false);
+      newStream.getTracks().forEach((track) => track.stop()); // Detener el micrófono después de grabar
+    };
+
+    setMediaRecorder(recorder);
+    recorder.start();
+    setRecording(true);
+    setError(false); // Resetear error al comenzar una nueva grabación
+    setStream(newStream); // Guardar el nuevo stream
   };
 
   const handleStopRecording = () => {
@@ -142,20 +135,20 @@ const AudioRecorder = ({ age, gender }) => {
             </button>
           )}
             
-                {audioURL && (
-          <div className='audioBarra'>
-          <audio controls src={audioURL}  />
-            {firstSubmit ? (
-              <button onClick={handleFirstSubmit} className='icon-button'>
-                <img src="https://img.icons8.com/ios/50/send.png" alt="send" />
-              </button>
-            ) : (
-              <button onClick={handleSecondSubmit} className='icon-button'>
-                <img src="https://img.icons8.com/ios/50/send.png" alt="send" />
-              </button>
-            )}
-          </div>
-                )}
+          {audioURL && (
+            <div className='audioBarra'>
+              <audio controls src={audioURL}  />
+              {firstSubmit ? (
+                <button onClick={handleFirstSubmit} className='icon-button'>
+                  <img src="https://img.icons8.com/ios/50/send.png" alt="send" />
+                </button>
+              ) : (
+                <button onClick={handleSecondSubmit} className='icon-button'>
+                  <img src="https://img.icons8.com/ios/50/send.png" alt="send" />
+                </button>
+              )}
+            </div>
+          )}
         </div>
   
       {error && (
@@ -164,8 +157,8 @@ const AudioRecorder = ({ age, gender }) => {
         </div>
       )}
 
-         {/* Popup de agradecimiento */}
-         {showThanksPopup && (
+      {/* Popup de agradecimiento */}
+      {showThanksPopup && (
         <div className="popup-thanks-container">
           <div className="popup-thanks-content">
             <img src="https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2Fmessi-facebook.jpg?alt=media&token=52ac7ca5-d9a8-41d1-83a8-8a125715f548" alt="Gracias" />
@@ -174,11 +167,8 @@ const AudioRecorder = ({ age, gender }) => {
           </div>
         </div>
       )}
-
     </div>
   );
-  
 };
-
 
 export default AudioRecorder;
