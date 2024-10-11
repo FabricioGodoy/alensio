@@ -45,7 +45,7 @@ return (
             {videoURL ? (
                 <div>
                     {/* <h3>Reproduciendo Video</h3> */}
-                    <video controls width="100%">
+                    <video controls width="60%">
                         <source src={videoURL} type="video/mp4" />
                         Tu navegador no soporta el elemento de video.
                     </video>
