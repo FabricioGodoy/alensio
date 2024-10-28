@@ -150,18 +150,22 @@
 /* PopupThanks.css */
 
 .popup-thanks-container {
+  overflow-y:scroll;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semi-transparente */
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   z-index: 2000; /* Un valor más alto que el primer popup para asegurarse de que esté por encima de todo */
 }
-
+.popup-thanks-content{
+  overflow-y: scroll;
+}
 .popup-thanks-content {
   background-color: #fff;
   padding: 40px;
