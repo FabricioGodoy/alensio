@@ -164,7 +164,7 @@ const AudioRecorder = ({ age, gender }) => {
               <img src="https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2FImagen%20de%20WhatsApp%202024-10-11%20a%20las%2013.36.39_0724cc4e.jpg?alt=media&token=c33ee83f-a89d-40d1-85b8-4936222d85ac" alt="Gracias" />
               <h2>GRACIAS </h2>
               <p>¡Gracias por tu participación!</p>
-              <img src="https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2FIMG_8785.JPG?alt=media&token=5eae70cf-dce4-4954-9b4b-c81638f8148b" alt="sarasa" />
+              <img src="https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2FIMG_8804.JPG?alt=media&token=71fdfb5a-a2ad-4ff1-81be-b30c84ae171c" alt="sarasa" />
               <img src="https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2FIMG_8783.JPG?alt=media&token=a5b09e3a-9868-4c9a-a32e-b6ae28d6729f" alt="Gracias2" />
               <img src="https://firebasestorage.googleapis.com/v0/b/alensio-5ea42.appspot.com/o/imagenes%2FLogo_de_la_Universidad_de_Buenos_Aires.jpg?alt=media&token=d86766f9-c9dd-42d0-85f8-4965b8906ea0"  alt="Gracias3" />
 
